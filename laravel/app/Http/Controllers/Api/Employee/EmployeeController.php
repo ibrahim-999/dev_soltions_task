@@ -72,8 +72,8 @@ class EmployeeController extends ApiController
 
     public function getEmployee($search): \Illuminate\Http\Response
     {
-        $employees = User::where('name','like','%'.$search.'%')
-            ->orWhere('job_title','like','%'.$search.'%')
+        $employees = User::whereRaw('LOWER(`name`) like ?', ['%'.strtolower($search).'%'])
+            ->orWhereRaw('LOWER(`job_title`) like ?', ['%'.strtolower($search).'%'])
             ->get();
 
         return ApiResponse::success([
