@@ -3,7 +3,11 @@
 namespace App\Domains\User\v1\Services;
 
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 
 class UserService
 {
@@ -44,4 +48,64 @@ class UserService
         }
 
     }
+    public function search(Request $request): ?UserService
+    {
+        try {
+            $this->userModel->when($request->email,function ($q) use ($request){
+                $q->where(function ($q) use ($request) {
+                    $q->where('email', "%{$request->email}%");
+                });
+            });
+            return $this;
+        } catch (\Throwable $exception) {
+            throw $exception;
+        }
+
+    }
+    public function index(): Collection
+    {
+        try {
+            return $this->userModel->get();
+        } catch (\Throwable $exception) {
+            throw $exception;
+        }
+    }
+    public function paginate(int $itemsPerPage): LengthAwarePaginator
+    {
+        try {
+            return $this->userModel->paginate($itemsPerPage);
+        } catch (\Throwable $exception) {
+            throw $exception;
+        }
+    }
+    public function paginate_simple(int $itemsPerPage): Paginator
+    {
+        try {
+            return $this->userModel->simplePaginate($itemsPerPage);
+        } catch (\Throwable $exception) {
+            throw $exception;
+        }
+    }
+
+    public function getCollection(): ?Model
+    {
+        try {
+            return $this->userModel;
+        } catch (\Throwable $exception) {
+            throw $exception;
+        }
+
+    }
+
+    public function count():int
+    {
+        try {
+            return $this->userModel->count();
+        } catch (\Throwable $exception) {
+            throw $exception;
+        }
+    }
+
+
+
 }
