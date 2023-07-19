@@ -28,5 +28,6 @@ Route::prefix('v1')
                 Route::get('get-employee/{search}', 'getEmployee');
                 Route::post('update-profile/{employee}', 'update');
                 Route::delete('delete-profile/{employee}', 'destroy');
+                Route::get('report', 'report');
             });
     });

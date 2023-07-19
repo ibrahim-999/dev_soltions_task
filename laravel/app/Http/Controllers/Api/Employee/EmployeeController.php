@@ -5,10 +5,9 @@ namespace App\Http\Controllers\Api\Employee;
 use App\Domains\User\v1\Services\UserService;
 use App\Http\Controllers\ApiController;
 use App\Http\Requests\Api\Employee\UpdateEmployeeRequest;
-use App\Http\Resources\CitiesResource;
 use App\Http\Resources\EmployeeResource;
+use App\Http\Resources\EmployeeWithSalaryResource;
 use App\Libraries\ApiResponse;
-use App\Models\City;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -79,6 +78,17 @@ class EmployeeController extends ApiController
 
         return ApiResponse::success([
             'employees' => EmployeeResource::collection($employees)
+        ]);
+    }
+
+    public function report(Request $request): \Illuminate\Http\Response
+    {
+        $employees = User::query()
+            ->orderBy('department', 'DESC')
+            ->orderBy('salary', 'DESC')
+            ->get();
+        return ApiResponse::success([
+            'employees' => EmployeeWithSalaryResource::collection($employees)
         ]);
     }
 
