@@ -5,7 +5,11 @@ namespace App\Http\Controllers\Api\Employee;
 use App\Domains\User\v1\Services\UserService;
 use App\Http\Controllers\ApiController;
 use App\Http\Requests\Api\Employee\UpdateEmployeeRequest;
+use App\Http\Resources\CitiesResource;
 use App\Http\Resources\EmployeeResource;
+use App\Libraries\ApiResponse;
+use App\Models\City;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class EmployeeController extends ApiController
@@ -66,5 +70,17 @@ class EmployeeController extends ApiController
 
         return $this->successDeleteMessage();
     }
+
+    public function getEmployee($search): \Illuminate\Http\Response
+    {
+        $employees = User::where('name','like','%'.$search.'%')
+            ->orWhere('job_title','like','%'.$search.'%')
+            ->get();
+
+        return ApiResponse::success([
+            'employees' => EmployeeResource::collection($employees)
+        ]);
+    }
+
 
 }
