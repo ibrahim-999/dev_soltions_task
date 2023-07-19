@@ -74,7 +74,7 @@ class EmployeeController extends ApiController
     {
         $employees = User::whereRaw('LOWER(`name`) like ?', ['%'.strtolower($search).'%'])
             ->orWhereRaw('LOWER(`job_title`) like ?', ['%'.strtolower($search).'%'])
-            ->get();
+            ->paginate();
 
         return ApiResponse::success([
             'employees' => EmployeeResource::collection($employees)
@@ -86,7 +86,7 @@ class EmployeeController extends ApiController
         $employees = User::query()
             ->orderBy('department', 'DESC')
             ->orderBy('salary', 'DESC')
-            ->get();
+            ->paginate();
         return ApiResponse::success([
             'employees' => EmployeeWithSalaryResource::collection($employees)
         ]);
