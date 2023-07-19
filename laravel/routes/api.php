@@ -25,5 +25,6 @@ Route::prefix('v1')
             ->controller(EmployeeController::class)
             ->group(function () {
                 Route::get('list-all', 'listEmployees');
+                Route::post('profile/{employee}', 'update');
             });
     });

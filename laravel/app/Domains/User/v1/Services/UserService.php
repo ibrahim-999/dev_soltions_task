@@ -86,7 +86,6 @@ class UserService
             throw $exception;
         }
     }
-
     public function getCollection(): ?Model
     {
         try {
@@ -96,7 +95,6 @@ class UserService
         }
 
     }
-
     public function count():int
     {
         try {
@@ -104,6 +102,29 @@ class UserService
         } catch (\Throwable $exception) {
             throw $exception;
         }
+    }
+
+    public function update(Request $request, int $user_id): bool
+    {
+        try {
+            $data = $request->validated();
+
+            // TODO: if has any active cart throw exception
+            return $this->userModel->where('id', $user_id)->update($data);
+        } catch (\Throwable $exception) {
+            throw $exception;
+        }
+
+    }
+
+    public function find(string $key, string|null $value): ?Model
+    {
+        try {
+            return $this->userModel->where('id', request()->user()->id)->where($key, $value)->first();
+        } catch (\Throwable $exception) {
+            throw $exception;
+        }
+
     }
 
 
