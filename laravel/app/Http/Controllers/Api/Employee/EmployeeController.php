@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Employee;
 
 use App\Domains\User\v1\Services\UserService;
+use App\Exports\ExportEmployeeReportExport;
 use App\Http\Controllers\ApiController;
 use App\Http\Requests\Api\Employee\UpdateEmployeeRequest;
 use App\Http\Resources\EmployeeResource;
@@ -83,10 +84,10 @@ class EmployeeController extends ApiController
 
     public function report(Request $request): \Illuminate\Http\Response
     {
-        $employees = User::query()
-            ->orderBy('department', 'DESC')
-            ->orderBy('salary', 'DESC')
-            ->paginate();
+        $employees = User::employeesWithSalaries();
+
+        (new ExportEmployeeReportExport($employees))->download('employee_report.xlsx');
+
         return ApiResponse::success([
             'employees' => EmployeeWithSalaryResource::collection($employees)
         ]);
