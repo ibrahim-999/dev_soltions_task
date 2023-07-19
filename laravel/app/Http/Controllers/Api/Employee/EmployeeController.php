@@ -47,4 +47,24 @@ class EmployeeController extends ApiController
         }
     }
 
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(int $id)
+    {
+        $employee = $this->userService->find('id', $id);
+
+        if (!$employee) {
+            return $this->failResourceNotFoundMessage('employee');
+        }
+
+        $deleted = $this->userService->delete($employee);
+
+        if (!$deleted) {
+            return $this->failDeleteMessage();
+        }
+
+        return $this->successDeleteMessage();
+    }
+
 }

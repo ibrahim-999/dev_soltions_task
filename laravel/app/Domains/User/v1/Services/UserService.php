@@ -127,6 +127,13 @@ class UserService
 
     }
 
-
+    public function delete(Model $item): bool
+    {
+        try {
+            return $item->delete();
+        } catch (\Throwable $exception) {
+            throw $exception;
+        }
+    }
 
 }
